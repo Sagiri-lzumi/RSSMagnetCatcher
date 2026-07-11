@@ -1,0 +1,2 @@
+# RSSMagnetCatcher
+这是一个收集RRS的信息的dotnet工具
