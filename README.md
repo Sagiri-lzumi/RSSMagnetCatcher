@@ -417,5 +417,4 @@ dotnet test RSSMagnetCatcher.Tests/RSSMagnetCatcher.Tests.csproj
 ## 说明
 
 - 本仓库的 `RRSMC.md` 是核心开发要求文档，记录了完整的功能与设计规格。
-- `磁力链接/`、`AGENTS.md` 等本地文件已在 `.gitignore` 中排除，不会进入仓库。
 - 本程序仅用于收集和管理 RSS 中公开的 magnet/torrent 链接，不下载、不解析、不集成下载器，也不自动抓取任意网页。
