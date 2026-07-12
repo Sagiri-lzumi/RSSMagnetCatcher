@@ -1,3 +1,4 @@
+using RSSMagnetCatcher.App;
 using System.ComponentModel;
 using RSSMagnetCatcher.Core.Models;
 using RSSMagnetCatcher.Core.Services;
@@ -326,6 +327,7 @@ public sealed class MainForm : Form
     private void BuildInterface()
     {
         Text = "RSS Magnet Collector";
+        Icon = TrayIconFactory.Create(ApplicationState.Normal);
         StartPosition = FormStartPosition.CenterScreen;
         MinimumSize = new Size(1080, 680);
         ClientSize = new Size(1360, 820);
@@ -341,16 +343,18 @@ public sealed class MainForm : Form
         ConfigureSidebar();
         ConfigureItemGrid();
 
-        var split = new SplitContainer
-        {
-            Dock = DockStyle.Fill,
-            SplitterDistance = 250,
-            FixedPanel = FixedPanel.Panel1
-        };
-        split.BackColor = UiTheme.WindowBackColor;
-        split.Panel1.Padding = new Padding(16, 14, 10, 14);
-        split.Panel2.Padding = new Padding(10, 14, 16, 14);
-        split.Panel1.BackColor = UiTheme.PanelBackColor;
+       var split = new SplitContainer
+       {
+           Dock = DockStyle.Fill,
+           SplitterDistance = 250,
+            FixedPanel = FixedPanel.Panel1,
+            SplitterWidth = 1,
+            SplitterIncrement = 1
+       };
+       split.BackColor = UiTheme.WindowBackColor;
+       split.Panel1.Padding = new Padding(16, 14, 10, 14);
+       split.Panel2.Padding = new Padding(10, 14, 16, 14);
+        split.Panel1.BackColor = UiTheme.SidebarBackColor;
         split.Panel2.BackColor = UiTheme.PanelBackColor;
         split.Panel1.Controls.Add(_sidebarTree);
         split.Panel1.Controls.Add(CreateSectionLabel("订阅与视图"));
@@ -539,14 +543,15 @@ public sealed class MainForm : Form
 
     private Control BuildActionBar()
     {
-        var bar = new FlowLayoutPanel
-        {
-            Dock = DockStyle.Bottom,
-            Height = 76,
-            Padding = new Padding(18, 14, 18, 14),
-            WrapContents = false,
-            BackColor = UiTheme.PanelBackColor
-        };
+       var bar = new FlowLayoutPanel
+       {
+           Dock = DockStyle.Bottom,
+            Height = 72,
+            Padding = new Padding(18, 12, 18, 12),
+           WrapContents = false,
+            BackColor = UiTheme.PanelBackColor,
+            BorderStyle = BorderStyle.None
+       };
         bar.Controls.Add(CreateActionButton("刷新订阅", () => _ = CheckAllAsync(), "立即检查所有启用订阅。"));
         bar.Controls.Add(CreateActionButton("按条件筛选并勾选", CheckCurrentFilteredItems, "按当前条件自动勾选，之后可手动增减；复制或导出后结算批次。"));
         bar.Controls.Add(CreateActionButton("复制已勾选磁力", CopyCheckedItems, "复制已勾选条目的 magnet，并标记成功项为已导出。", primary: true));
@@ -556,16 +561,16 @@ public sealed class MainForm : Form
 
     private Button CreateActionButton(string text, Action action, string toolTip, bool primary = false)
     {
-        var button = new Button
-        {
-            Text = text,
-            AutoSize = false,
-            Width = text.Length > 8 ? 190 : 150,
-            Height = 46,
-            Margin = new Padding(0, 0, 10, 0),
+       var button = new Button
+       {
+           Text = text,
+           AutoSize = false,
+            Width = text.Length > 8 ? 200 : 160,
+            Height = 44,
+            Margin = new Padding(0, 0, 8, 0),
             Font = new Font(Font.FontFamily, 9.5F, FontStyle.Bold),
-            Tag = primary ? "primary" : "secondary"
-        };
+           Tag = primary ? "primary" : "secondary"
+       };
         if (primary)
         {
             UiTheme.StylePrimaryButton(button);
@@ -719,9 +724,9 @@ public sealed class MainForm : Form
         _sidebarTree.BorderStyle = BorderStyle.None;
         _sidebarTree.HideSelection = false;
         _sidebarTree.FullRowSelect = true;
-        _sidebarTree.ShowNodeToolTips = true;
-        _sidebarTree.ItemHeight = 28;
-        _sidebarTree.BackColor = UiTheme.PanelBackColor;
+       _sidebarTree.ShowNodeToolTips = true;
+        _sidebarTree.ItemHeight = 30;
+        _sidebarTree.BackColor = UiTheme.SidebarBackColor;
         _sidebarTree.ForeColor = UiTheme.InkColor;
         _sidebarTree.NodeMouseHover += (_, eventArgs) =>
         {
@@ -756,15 +761,18 @@ public sealed class MainForm : Form
         _itemGrid.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
         _itemGrid.BackgroundColor = Color.White;
         _itemGrid.BorderStyle = BorderStyle.None;
-        _itemGrid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-        _itemGrid.GridColor = UiTheme.HairlineColor;
-        _itemGrid.EnableHeadersVisualStyles = false;
-        _itemGrid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(232, 226, 213);
-        _itemGrid.ColumnHeadersDefaultCellStyle.ForeColor = UiTheme.InkColor;
-        _itemGrid.ColumnHeadersDefaultCellStyle.Font = new Font(Font.FontFamily, 9F, FontStyle.Bold);
-        _itemGrid.ColumnHeadersHeight = 38;
-        _itemGrid.RowTemplate.Height = 34;
-        _itemGrid.AlternatingRowsDefaultCellStyle.BackColor = UiTheme.AlternateRowColor;
+       _itemGrid.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+       _itemGrid.GridColor = UiTheme.HairlineColor;
+       _itemGrid.EnableHeadersVisualStyles = false;
+        _itemGrid.ColumnHeadersDefaultCellStyle.BackColor = UiTheme.GridHeaderColor;
+       _itemGrid.ColumnHeadersDefaultCellStyle.ForeColor = UiTheme.InkColor;
+       _itemGrid.ColumnHeadersDefaultCellStyle.Font = new Font(Font.FontFamily, 9F, FontStyle.Bold);
+        _itemGrid.ColumnHeadersHeight = 40;
+        _itemGrid.RowTemplate.Height = 32;
+        _itemGrid.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+        _itemGrid.ColumnHeadersDefaultCellStyle.SelectionBackColor = UiTheme.GridHeaderColor;
+        _itemGrid.ColumnHeadersDefaultCellStyle.SelectionForeColor = UiTheme.InkColor;
+       _itemGrid.AlternatingRowsDefaultCellStyle.BackColor = UiTheme.AlternateRowColor;
         _itemGrid.DefaultCellStyle.SelectionBackColor = UiTheme.SelectedRowColor;
         _itemGrid.DefaultCellStyle.SelectionForeColor = UiTheme.InkColor;
         _itemGrid.DefaultCellStyle.ForeColor = UiTheme.InkColor;
@@ -1516,7 +1524,7 @@ public sealed class MainForm : Form
                 : $"当前条件：{TrimExpression(expression)}"
             : $"当前条件错误：{error}";
         _conditionSummaryLabel.ForeColor = string.IsNullOrWhiteSpace(error)
-            ? Color.FromArgb(44, 72, 74)
+            ? UiTheme.InkColor
             : Color.Firebrick;
     }
 
@@ -1528,7 +1536,7 @@ public sealed class MainForm : Form
             ? $"待结算批次：复制磁力或导出种子后，未勾选项会转为暂不导出（{batch.ItemIds.Count} 条，{batch.CreatedAt.ToLocalTime():HH:mm:ss}）"
             : "无待结算批次：手动复制只会标记实际导出的条目。";
         _batchSummaryLabel.ForeColor = batch.IsActive
-            ? Color.FromArgb(174, 112, 0)
+            ? UiTheme.WarningColor
             : UiTheme.AccentDarkColor;
     }
 
@@ -1580,12 +1588,12 @@ public sealed class MainForm : Form
             return;
         }
 
-        if (string.Equals(item.ProcessingStatus, ProcessingStatuses.Deleted, StringComparison.Ordinal))
-        {
-            e.CellStyle.ForeColor = Color.FromArgb(142, 144, 140);
-            e.CellStyle.BackColor = Color.FromArgb(241, 239, 233);
-            e.CellStyle.SelectionForeColor = Color.FromArgb(90, 92, 88);
-            e.CellStyle.SelectionBackColor = Color.FromArgb(226, 224, 218);
+       if (string.Equals(item.ProcessingStatus, ProcessingStatuses.Deleted, StringComparison.Ordinal))
+       {
+            e.CellStyle.ForeColor = UiTheme.MutedColor;
+            e.CellStyle.BackColor = Color.FromArgb(245, 245, 248);
+            e.CellStyle.SelectionForeColor = Color.FromArgb(71, 85, 105);
+            e.CellStyle.SelectionBackColor = Color.FromArgb(231, 231, 237);
             if (_itemGrid.Columns[e.ColumnIndex].DataPropertyName == nameof(MagnetItem.IsChecked))
             {
                 e.Value = false;
@@ -1615,22 +1623,22 @@ public sealed class MainForm : Form
                 ? "已删除"
                 : TranslateStatus(item.MatchStatus);
         }
-        else if (_itemGrid.Columns[e.ColumnIndex].Name == "MagnetReady")
-        {
-            e.Value = string.IsNullOrWhiteSpace(item.Magnet) ? "—" : "可复制";
+       else if (_itemGrid.Columns[e.ColumnIndex].Name == "MagnetReady")
+       {
+           e.Value = string.IsNullOrWhiteSpace(item.Magnet) ? "—" : "可复制";
             e.CellStyle.ForeColor = string.IsNullOrWhiteSpace(item.Magnet)
-                ? Color.FromArgb(145, 154, 154)
-                : UiTheme.AccentDarkColor;
-            e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        }
-        else if (_itemGrid.Columns[e.ColumnIndex].Name == "TorrentReady")
-        {
-            e.Value = string.IsNullOrWhiteSpace(item.TorrentUrl) ? "—" : "可导出";
+                ? UiTheme.MutedColor
+                : UiTheme.SuccessColor;
+           e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+       }
+       else if (_itemGrid.Columns[e.ColumnIndex].Name == "TorrentReady")
+       {
+           e.Value = string.IsNullOrWhiteSpace(item.TorrentUrl) ? "—" : "可导出";
             e.CellStyle.ForeColor = string.IsNullOrWhiteSpace(item.TorrentUrl)
-                ? Color.FromArgb(145, 154, 154)
-                : Color.FromArgb(120, 92, 18);
-            e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
-        }
+                ? UiTheme.MutedColor
+                : UiTheme.WarningColor;
+           e.CellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+       }
     }
 
     private void ItemGridOnCellBeginEdit(object? sender, DataGridViewCellCancelEventArgs e)
@@ -1736,15 +1744,15 @@ public sealed class MainForm : Form
             : string.Empty;
     }
 
-    private static Color GetIndicatorColor(MagnetItem item)
-    {
-        return item.ProcessingStatus switch
-        {
-            ProcessingStatuses.Pending => Color.FromArgb(30, 168, 96),
-            ProcessingStatuses.Discarded => Color.FromArgb(218, 165, 32),
-            _ => Color.Transparent
-        };
-    }
+   private static Color GetIndicatorColor(MagnetItem item)
+   {
+       return item.ProcessingStatus switch
+       {
+            ProcessingStatuses.Pending => UiTheme.SuccessColor,
+            ProcessingStatuses.Discarded => UiTheme.WarningColor,
+           _ => Color.Transparent
+       };
+   }
 
     private sealed record FeedListEntry(ItemListViewMode Mode, string? FeedId, string Name)
     {
