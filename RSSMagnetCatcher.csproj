@@ -8,12 +8,20 @@
     <RootNamespace>RSSMagnetCatcher</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <ApplicationIcon>Resources\app.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="RSSMagnetCatcher.Tests\**\*.cs" />
+    <Compile Remove="tmp\**\*.cs" />
     <EmbeddedResource Remove="RSSMagnetCatcher.Tests\**\*" />
+    <EmbeddedResource Remove="tmp\**\*" />
     <None Remove="RSSMagnetCatcher.Tests\**\*" />
+    <None Remove="tmp\**\*" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Resources\app.ico" Pack="false" />
   </ItemGroup>
 
 </Project>
