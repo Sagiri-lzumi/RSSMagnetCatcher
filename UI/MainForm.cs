@@ -553,6 +553,7 @@ public sealed class MainForm : Form
             BorderStyle = BorderStyle.None
        };
         bar.Controls.Add(CreateActionButton("刷新订阅", () => _ = CheckAllAsync(), "立即检查所有启用订阅。"));
+        bar.Controls.Add(CreateActionButton("全部勾选", SelectAllCurrentItems, "勾选当前范围全部可筛选 magnet，并应用规则。"));
         bar.Controls.Add(CreateActionButton("按条件筛选并勾选", CheckCurrentFilteredItems, "按当前条件自动勾选，之后可手动增减；复制或导出后结算批次。"));
         bar.Controls.Add(CreateActionButton("复制已勾选磁力", CopyCheckedItems, "复制已勾选条目的 magnet，并标记成功项为已导出。", primary: true));
         bar.Controls.Add(CreateActionButton("导出已勾选种子", () => _ = ExportCheckedTorrentsAsync(), "下载并保存已勾选条目的 torrent 文件，成功项标记为已导出。"));
