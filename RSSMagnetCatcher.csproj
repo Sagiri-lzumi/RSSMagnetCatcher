@@ -9,6 +9,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <ApplicationIcon>Resources\app.ico</ApplicationIcon>
+    <Version>1.0.0</Version>
+    <Company>RSSMagnetCatcher</Company>
+    <Product>RSS Magnet Collector</Product>
   </PropertyGroup>
 
   <ItemGroup>
