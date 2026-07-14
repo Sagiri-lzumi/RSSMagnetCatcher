@@ -103,6 +103,17 @@ public static class UiTheme
         toolStrip.Renderer = new FlatToolStripRenderer();
        toolStrip.ForeColor = InkColor;
    }
+   public static void StyleContextMenu(ContextMenuStrip menu)
+   {
+       menu.BackColor = PanelBackColor;
+       menu.ForeColor = InkColor;
+       menu.Font = new Font("Microsoft YaHei UI", 9F);
+       menu.Padding = new Padding(4, 2, 4, 2);
+       menu.RenderMode = ToolStripRenderMode.ManagerRenderMode;
+       menu.Renderer = new FlatToolStripRenderer();
+       menu.ShowImageMargin = false;
+   }
+
 
    private static void ApplyControls(Control.ControlCollection controls)
     {

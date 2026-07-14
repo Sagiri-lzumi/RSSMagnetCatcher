@@ -808,6 +808,7 @@ public sealed class MainForm : Form
     private ContextMenuStrip BuildGridContextMenu()
     {
         var menu = new ContextMenuStrip();
+        UiTheme.StyleContextMenu(menu);
         menu.Items.Add("复制选中磁力", null, (_, _) => CopySelectedRows());
         menu.Items.Add("导出选中种子", null, (_, _) => _ = ExportSelectedTorrentsAsync());
         menu.Items.Add("恢复选中暂不导出为待导出", null, (_, _) => RestoreSelectedDiscarded());

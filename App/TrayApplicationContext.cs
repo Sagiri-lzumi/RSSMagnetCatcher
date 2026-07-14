@@ -88,6 +88,7 @@ public sealed class TrayApplicationContext : ApplicationContext
     private ContextMenuStrip BuildTrayMenu()
     {
         var menu = new ContextMenuStrip();
+        UiTheme.StyleContextMenu(menu);
         menu.Items.Add("打开主界面", null, (_, _) => _mainForm.ShowFromTray(_mainForm.CurrentStatus.NewCount > 0));
         menu.Items.Add("复制全部待导出磁力", null, (_, _) => CopyFromTray(() => _mainForm.CopyAllUnexported(false)));
         menu.Items.Add("复制符合当前条件的待导出项", null, (_, _) => CopyFromTray(() => _mainForm.CopyMatchingUnexported(false)));
