@@ -12,7 +12,7 @@ public sealed class DataInitializerTests : IDisposable
         Guid.NewGuid().ToString("N"));
 
     [Fact]
-    public void Initialize_CreatesPortableDataFilesAndMikanFeed()
+    public void Initialize_CreatesPortableDataFilesWithNoDefaultFeeds()
     {
         var paths = new DataPaths(_tempDirectory);
         var configStore = new JsonConfigStore();
@@ -29,9 +29,9 @@ public sealed class DataInitializerTests : IDisposable
         Assert.True(File.Exists(paths.ErrorLogFile));
         Assert.True(Directory.Exists(paths.TorrentExportDirectory));
 
-        var feed = Assert.Single(configStore.Load(paths.FeedsFile, new List<FeedConfig>()));
-        Assert.Equal("Mikan Classic", feed.Name);
-        Assert.Equal("https://mikanani.me/RSS/Classic", feed.Url);
+        Assert.True(File.Exists(paths.FeedsFile));
+        var feeds = configStore.Load(paths.FeedsFile, new List<FeedConfig>());
+        Assert.Empty(feeds);
     }
 
     public void Dispose()

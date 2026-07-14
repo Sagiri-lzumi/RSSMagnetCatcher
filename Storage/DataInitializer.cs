@@ -19,7 +19,7 @@ public sealed class DataInitializer
         Directory.CreateDirectory(_paths.LogsDirectory);
         Directory.CreateDirectory(_paths.TorrentExportDirectory);
         EnsureJson(_paths.SettingsFile, new AppSettings());
-        EnsureJson(_paths.FeedsFile, CreateDefaultFeeds());
+        EnsureJson(_paths.FeedsFile, new List<FeedConfig>());
         EnsureJson(_paths.RulesFile, CreateDefaultRules());
         EnsureJson(_paths.FeedStateFile, new Dictionary<string, FeedState>());
         EnsureJson(_paths.ActiveBatchFile, ActiveBatch.Empty());
@@ -43,21 +43,6 @@ public sealed class DataInitializer
         {
             File.WriteAllText(path, string.Empty, new UTF8Encoding(false));
         }
-    }
-
-    private static List<FeedConfig> CreateDefaultFeeds()
-    {
-        return
-        [
-            new FeedConfig
-            {
-                Id = "feed_mikan_classic",
-                Name = "Mikan Classic",
-                Url = "https://mikanani.me/RSS/Classic",
-                Group = "默认",
-                DefaultRuleId = "rule_1080p_sc"
-            }
-        ];
     }
 
     private static List<FilterRule> CreateDefaultRules()
